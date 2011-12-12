@@ -24,6 +24,13 @@ void write_file(const string& contents, char* file) {
   f.close();
 }
 
+// TODO(cmiles) parse output in tmp_out
+void parse_output(char* filename, Response* response) {
+  CHECK_NOTNULL(filename);
+  CHECK_NOTNULL(response);
+  response->set_message("hello");
+}
+
 void process(const Request& request, Response* response) {
   CHECK_NOTNULL(response);
 
@@ -46,14 +53,10 @@ void process(const Request& request, Response* response) {
   string cmd;
   ctemplate::ExpandTemplate("hmmer", ctemplate::DO_NOT_STRIP, &dict, &cmd);
   system(cmd.c_str());
-
-  // TODO(cmiles) parse output in tmp_out
-  ;
+  parse_output(tmp_out, response);
 
   remove(tmp_in);
   remove(tmp_out);
-
-  response->set_message("hello");
 }
 
 int main(int argc, char* argv[]) {
