@@ -16,8 +16,6 @@ DEFINE_string(recv_socket, "tcp://*:8000", "Communication channel from server");
 DEFINE_string(exe, "/usr/local/bin/phmmer", "hmmer3 executable");
 DEFINE_string(db, "/home/hmmer/data/uniprot_sprot.fasta", "hmmer3 database");
 
-using namespace std;
-
 void process(const Request& request, Response* response) {
   CHECK_NOTNULL(response);
 
@@ -37,7 +35,7 @@ void process(const Request& request, Response* response) {
   dict.SetValue("IN", tmp_in);
   dict.SetValue("OUT", tmp_out);
 
-  string cmd;
+  std::string cmd;
   ctemplate::ExpandTemplate("hmmer", ctemplate::DO_NOT_STRIP, &dict, &cmd);
   system(cmd.c_str());
   parse_output(tmp_out, response);
