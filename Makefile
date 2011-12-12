@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-I/usr/local/include -c -Wall
-LDFLAGS=-L/usr/local/lib -lctemplate_nothreads -lprotobuf -lgflags -lglog -lzmq -g3 -O0
+LDFLAGS=-L/usr/local/lib -lctemplate_nothreads -lprotobuf -lgflags -lglog -lzmq -lboost_regex -g3 -O0
 
 proto: hmmer.proto
 	protoc --cpp_out=. hmmer.proto
@@ -11,7 +11,7 @@ hmmer.pb.o: proto hmmer.pb.cc
 util.o: util.cc
 	$(CC) $(CFLAGS) util.cc
 
-parse.o: parse.cc
+parse.o: proto parse.cc
 	$(CC) $(CFLAGS) parse.cc
 
 client.o: client.cc proto

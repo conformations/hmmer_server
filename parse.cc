@@ -9,9 +9,18 @@
 #include <string>
 #include <vector>
 
+#include <boost/regex.hpp>
+#include <boost/algorithm/string/regex.hpp>
 #include <glog/logging.h>
 
-using namespace std;
+void tokenize(const std::string& line,
+              const std::string& expr,
+              std::vector<std::string>* tokens) {
+  CHECK_NOTNULL(tokens);
+  tokens->clear();
+  boost::regex pattern(expr);
+  boost::algorithm::split_regex(*tokens, line, pattern);
+}
 
 void string_tokenize( std::string const & str, std::vector< std::string >* lines) {
   std::stringstream ss(str);
@@ -39,6 +48,8 @@ int string_to_int(std::string const & str) {
 }
 
 void parse_output(char* filename, Response* response) {
+  using std::string;
+  using std::vector;
   CHECK_NOTNULL(filename);
   CHECK_NOTNULL(response);
 
