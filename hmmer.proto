@@ -1,0 +1,8 @@
+message Request {
+  // Query sequence in FASTA format
+  required string sequence = 1;
+}
+
+message Response {
+  required string message = 1;
+}
