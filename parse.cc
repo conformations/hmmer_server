@@ -5,12 +5,14 @@
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/regex.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include <glog/logging.h>
 
 void tokenize(const std::string& line,
@@ -20,17 +22,6 @@ void tokenize(const std::string& line,
   tokens->clear();
   boost::regex pattern(expr);
   boost::algorithm::split_regex(*tokens, line, pattern);
-}
-
-void string_tokenize( std::string const & str, std::vector< std::string >* lines) {
-  std::stringstream ss(str);
-  std::istream_iterator<std::string> it(ss);
-  std::istream_iterator<std::string> end;
-
-  while ( it != end ) {
-    lines->push_back(*it);
-    ++it;
-  }
 }
 
 double string_to_double(std::string const & str) {
@@ -67,7 +58,7 @@ void parse_output(char* filename, Response* response) {
       current_aln = response->add_alignments();
 
       vector<string> tokens;
-      string_tokenize(*i,&tokens);
+      tokenize(*i, "\\s+", &tokens);
 
       double const evalue(string_to_double(tokens[8]));
       double log_evalue = -1;
@@ -85,10 +76,15 @@ void parse_output(char* filename, Response* response) {
       string cons_line = remove_newlines(*i); ++i;
       string templ_line = remove_newlines(*i); ++i;
       string prob_line = remove_newlines(*i); ++i;
+
+      boost::trim(query_line);
+      boost::trim(cons_line);
+      boost::trim(templ_line);
+      boost::trim(prob_line);
   
       vector<string> tokens;
-      string_tokenize(query_line,&tokens);
-      assert( tokens.size() == 4 );
+      tokenize(query_line, "\\s+", &tokens);
+      CHECK(tokens.size() == 4) << "Incorrect number of tokens-- " << tokens.size();
 
       // 0 -> id
       // 1 -> start
@@ -100,8 +96,9 @@ void parse_output(char* filename, Response* response) {
       current_aln->set_aligned_query( current_aln->aligned_query() + tokens[2] );
   
       tokens.clear();
-      string_tokenize(templ_line,&tokens);
-      assert( tokens.size() == 4 );
+      tokenize(templ_line, "\\s+", &tokens);
+      CHECK(tokens.size() == 4) << "Incorrect number of tokens-- " << tokens.size(); 
+
       current_aln->set_id(tokens[0]);
       if ( current_aln->template_start() == 0 ) {
         current_aln->set_template_start(string_to_int(tokens[1]));
