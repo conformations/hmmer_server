@@ -11,10 +11,10 @@ hmmer.pb.o: proto hmmer.pb.cc
 util.o: util.cc
 	$(CC) $(CFLAGS) util.cc
 
-client.o: client.cc
+client.o: client.cc proto
 	$(CC) $(CFLAGS) client.cc
 
-server.o: server.cc
+server.o: server.cc proto
 	$(CC) $(CFLAGS) server.cc
 
 client: client.o util.o hmmer.pb.o
