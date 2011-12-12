@@ -1,0 +1,12 @@
+Prerequisites:
+- protobuf (http://code.google.com/p/protobuf/)
+- gflags (http://code.google.com/p/google-gflags/)
+- glog (http://code.google.com/p/google-glog/)
+- ctemplate (http://code.google.com/p/google-ctemplate/)
+- zeromq (http://www.zeromq.org/)
+- boost (http://www.boost.org/)
+
+Compiling:
+- Build the client (make client)
+- Build the server (make server)
+

@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-I/usr/local/include -c -Wall
-LDFLAGS=-L/usr/local/lib -lprotobuf -lgflags -lglog -lzmq -g3 -O0
+LDFLAGS=-L/usr/local/lib -lctemplate_nothreads -lprotobuf -lgflags -lglog -lzmq -g3 -O0
 
 proto: hmmer.proto
 	protoc --cpp_out=. hmmer.proto
