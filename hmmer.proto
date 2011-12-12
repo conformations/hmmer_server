@@ -4,5 +4,24 @@ message Request {
 }
 
 message Response {
-  required string message = 1;
+  message Alignment {
+    // Template id
+    required string id = 1 [ default = "blank" ];
+
+    required uint32 query_start = 2 [ default = 0 ];
+    required uint32 template_start = 3 [ default = 0 ];
+
+    // Aligned portion of query sequence
+    required string aligned_query = 4 [ default = "" ];
+
+    // Aligned portion of the template sequence
+    required string aligned_template = 5 [ default = "" ];
+
+    // Log e-value (base e)
+    optional float ln_evalue = 6 [ default = 0 ];
+    optional float bitscore = 7 [ default = 0 ];
+  }
+
+  // Unique identifier for the request
+  repeated Alignment alignments = 1;
 }

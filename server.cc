@@ -1,8 +1,9 @@
 #include "hmmer.pb.h"
+#include "parse.h"
 #include "util.h"
 
+#include <cstdio>
 #include <iostream>
-#include <fstream>
 #include <string>
 
 #include <ctemplate/template.h>
@@ -16,20 +17,6 @@ DEFINE_string(exe, "/usr/local/bin/phmmer", "hmmer3 executable");
 DEFINE_string(db, "/home/hmmer/data/uniprot_sprot.fasta", "hmmer3 database");
 
 using namespace std;
-
-void write_file(const string& contents, char* file) {
-  CHECK_NOTNULL(file);
-  ofstream f(file);
-  f << contents;
-  f.close();
-}
-
-// TODO(cmiles) parse output in tmp_out
-void parse_output(char* filename, Response* response) {
-  CHECK_NOTNULL(filename);
-  CHECK_NOTNULL(response);
-  response->set_message("hello");
-}
 
 void process(const Request& request, Response* response) {
   CHECK_NOTNULL(response);

@@ -11,6 +11,9 @@ hmmer.pb.o: proto hmmer.pb.cc
 util.o: util.cc
 	$(CC) $(CFLAGS) util.cc
 
+parse.o: parse.cc
+	$(CC) $(CFLAGS) parse.cc
+
 client.o: client.cc proto
 	$(CC) $(CFLAGS) client.cc
 
@@ -20,8 +23,8 @@ server.o: server.cc proto
 client: client.o util.o hmmer.pb.o
 	$(CC) $(LDFLAGS) client.o util.o hmmer.pb.o -o client
 
-server: server.o util.o hmmer.pb.o
-	$(CC) $(LDFLAGS) server.o util.o hmmer.pb.o -o server
+server: server.o parse.o util.o hmmer.pb.o
+	$(CC) $(LDFLAGS) server.o parse.o util.o hmmer.pb.o -o server
 
 all: client server
 

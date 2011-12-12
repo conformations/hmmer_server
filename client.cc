@@ -55,4 +55,5 @@ int main(int argc, char* argv[]) {
 
   Response resp;
   CHECK(proto_recv(&resp, &receiver));
+  cout << "Received " << resp.alignments_size() << " alignments" << endl;
 }

@@ -1,7 +1,13 @@
 #include "util.h"
 #include "zhelpers.hpp"
 
+#include <algorithm>
+#include <cstdlib>
+#include <fstream>
+#include <iterator>
+#include <sstream>
 #include <string>
+#include <vector>
 
 #include <glog/logging.h>
 #include <google/protobuf/message.h>
@@ -22,4 +28,26 @@ bool proto_recv(google::protobuf::Message* r, zmq::socket_t* socket) {
 
   std::string m = s_recv(*socket);
   return google::protobuf::TextFormat::ParseFromString(m, r);
+}
+
+void write_file(const std::string& contents, const char* file) {
+  CHECK_NOTNULL(file);
+  std::ofstream f(file);
+  f << contents;
+  f.close();
+}
+
+void read_file(const char* file, std::vector<std::string>* lines) {
+  CHECK_NOTNULL(file);
+  CHECK_NOTNULL(lines);
+
+  lines->clear();
+
+  std::string line;
+
+  std::ifstream f(file);
+  while (f.good()) {
+    getline(f, line);
+    lines->push_back(line);
+  }
 }
