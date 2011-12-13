@@ -10,9 +10,10 @@
 #include <string>
 #include <vector>
 
-#include <boost/regex.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/regex.hpp>
 #include <boost/algorithm/string/trim.hpp>
+#include <boost/regex.hpp>
 #include <glog/logging.h>
 
 void tokenize(const std::string& line,
@@ -54,7 +55,7 @@ void parse_output(char* filename, Response* response) {
   Response_Alignment* current_aln = NULL;
 
   for (vector<string>::const_iterator i = lines.begin(); i != lines.end(); ++i) {
-    if (i->substr(0,prefix.size()) == prefix) {
+    if (boost::starts_with(*i, prefix)) {
       current_aln = response->add_alignments();
 
       vector<string> tokens;
@@ -67,9 +68,9 @@ void parse_output(char* filename, Response* response) {
       current_aln->set_bitscore(string_to_double(tokens[4]));
 
       parsing = true;
-    } else if ( i->substr(0,finished_tag.size()) == finished_tag ) {
+    } else if (*i == finished_tag ) {
       break; // finished parsing
-    } else if ( i->substr(0,2) == ">>" || remove_newlines(*i).length() == 0 ) {
+    } else if ( boost::starts_with(*i, ">>") || remove_newlines(*i).length() == 0 ) {
       parsing = false;
     } else if ( parsing ) {
       string query_line = remove_newlines(*i); ++i;
