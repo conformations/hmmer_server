@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iterator>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -28,6 +29,14 @@ bool proto_recv(google::protobuf::Message* r, zmq::socket_t* socket) {
 
   std::string m = s_recv(*socket);
   return google::protobuf::TextFormat::ParseFromString(m, r);
+}
+
+void proto_show(const google::protobuf::Message& r, std::ostream* out) {
+  CHECK_NOTNULL(out);
+  
+  std::string m;
+  google::protobuf::TextFormat::PrintToString(r, &m);
+  (*out) << m << std::endl;
 }
 
 void write_file(const std::string& contents, const char* file) {

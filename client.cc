@@ -1,8 +1,8 @@
 #include "hmmer.pb.h"
 #include "util.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 
 #include <gflags/gflags.h>
@@ -55,5 +55,5 @@ int main(int argc, char* argv[]) {
 
   Response resp;
   CHECK(proto_recv(&resp, &receiver));
-  cout << "Received " << resp.alignments_size() << " alignments" << endl;
+  proto_show(resp, &std::cout);
 }
