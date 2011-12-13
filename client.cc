@@ -1,5 +1,5 @@
 #include "hmmer.pb.h"
-#include "util.h"
+#include "proto_util.h"
 
 #include <fstream>
 #include <iostream>

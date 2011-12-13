@@ -1,6 +1,5 @@
 #include "hmmer.pb.h"
 #include "str_util.h"
-#include "util.h"
 
 #include <cmath>
 #include <fstream>

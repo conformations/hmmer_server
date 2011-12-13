@@ -1,7 +1,7 @@
 #include "hmmer.pb.h"
 #include "parse.h"
+#include "proto_util.h"
 #include "str_util.h"
-#include "util.h"
 
 #include <cstdio>
 #include <iostream>
