@@ -10,3 +10,8 @@ Compiling:
 - Build the client (make client)
 - Build the server (make server)
 
+Running:
+- ./client --fasta input/1vre.fasta
+- ./server
+
+(Order is unimportant)
