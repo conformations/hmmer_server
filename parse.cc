@@ -49,27 +49,30 @@ void parse_output(char* filename, Response* response) {
   read_file(filename, &lines);
 
   static string const prefix = "  == domain";
-  static string const finished_tag = "Internal pipeline statistics summary:";
+  static string const sentinel = "Internal pipeline statistics summary:";
 
   bool parsing = false;
   Response_Alignment* current_aln = NULL;
 
   for (vector<string>::const_iterator i = lines.begin(); i != lines.end(); ++i) {
-    if (boost::starts_with(*i, prefix)) {
+    string line = *i;
+
+    if (line == sentinel)
+      break;
+
+    if (boost::starts_with(line, prefix)) {
       current_aln = response->add_alignments();
 
       vector<string> tokens;
-      tokenize(*i, "\\s+", &tokens);
+      tokenize(line, "\\s+", &tokens);
 
-      double const evalue(string_to_double(tokens[8]));
-      double log_evalue = -1;
-      if ( evalue > 0 ) log_evalue = std::log(evalue);
-      current_aln->set_ln_evalue(log_evalue);
-      current_aln->set_bitscore(string_to_double(tokens[4]));
+      double evalue = string_to_double(tokens[8]);
+      current_aln->set_ln_evalue(std::log(evalue));
+
+      double bitscore = string_to_double(tokens[4]);
+      current_aln->set_bitscore(bitscore);
 
       parsing = true;
-    } else if (*i == finished_tag ) {
-      break; // finished parsing
     } else if ( boost::starts_with(*i, ">>") || remove_newlines(*i).length() == 0 ) {
       parsing = false;
     } else if ( parsing ) {
