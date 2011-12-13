@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -15,6 +14,7 @@
 #include <boost/algorithm/string/regex.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/trim.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
 #include <glog/logging.h>
 
@@ -40,18 +40,10 @@ void replace_all(const std::string& find, const std::string& replace, std::strin
   boost::replace_all(*str, find, replace);
 }
 
-double string_to_double(std::string const & str) {
-  return std::strtod(str.c_str(),0);
-}
-
 std::string remove_newlines( std::string const & str ) {
   std::string copy = str;
   copy.erase(std::remove(copy.begin(), copy.end(), '\n'), copy.end());
   return copy;
-}
-
-int string_to_int(std::string const & str) {
-  return std::strtol(str.c_str(),0,0);
 }
 
 void parse_output(char* filename, Response* response) {
@@ -78,10 +70,10 @@ void parse_output(char* filename, Response* response) {
       vector<string> tokens;
       tokenize(line, "\\s+", &tokens);
 
-      double evalue = string_to_double(tokens[9]);
+      double evalue = boost::lexical_cast<double>(tokens[9]);
       current_aln->set_ln_evalue(std::log(evalue));
 
-      double bitscore = string_to_double(tokens[5]);
+      double bitscore = boost::lexical_cast<double>(tokens[5]);
       current_aln->set_bitscore(bitscore);
 
       parsing = true;
@@ -107,7 +99,8 @@ void parse_output(char* filename, Response* response) {
       // 2 -> sequence
       // 3 -> stop
       if ( current_aln->query_start() == 0 ) {
-        current_aln->set_query_start(string_to_int(tokens[1]));
+        unsigned idx = boost::lexical_cast<unsigned>(tokens[1]);
+        current_aln->set_query_start(idx);
       }
       current_aln->set_aligned_query( current_aln->aligned_query() + tokens[2] );
   
@@ -117,7 +110,8 @@ void parse_output(char* filename, Response* response) {
 
       current_aln->set_id(tokens[0]);
       if ( current_aln->template_start() == 0 ) {
-        current_aln->set_template_start(string_to_int(tokens[1]));
+        unsigned idx = boost::lexical_cast<unsigned>(tokens[1]);
+        current_aln->set_template_start(idx);
       }
       current_aln->set_aligned_template( current_aln->aligned_template() + tokens[2] );
     }
