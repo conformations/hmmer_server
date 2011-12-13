@@ -78,10 +78,10 @@ void parse_output(char* filename, Response* response) {
       vector<string> tokens;
       tokenize(line, "\\s+", &tokens);
 
-      double evalue = string_to_double(tokens[8]);
+      double evalue = string_to_double(tokens[9]);
       current_aln->set_ln_evalue(std::log(evalue));
 
-      double bitscore = string_to_double(tokens[4]);
+      double bitscore = string_to_double(tokens[5]);
       current_aln->set_bitscore(bitscore);
 
       parsing = true;
