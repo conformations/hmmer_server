@@ -1,7 +1,7 @@
 #include "hmmer.pb.h"
+#include "str_util.h"
 #include "util.h"
 
-#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -9,42 +9,13 @@
 #include <string>
 #include <vector>
 
-#include <boost/algorithm/string/erase.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/algorithm/string/regex.hpp>
-#include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/regex.hpp>
 #include <glog/logging.h>
 
 static const std::string prefix = "  == domain";
 static const std::string sentinel = "Internal pipeline statistics summary:";
-
-void tokenize(const std::string& line,
-              const std::string& expr,
-              std::vector<std::string>* tokens) {
-  CHECK_NOTNULL(tokens);
-  tokens->clear();
-  boost::regex pattern(expr);
-  boost::algorithm::split_regex(*tokens, line, pattern);
-}
-
-void remove_all(const std::string& s, std::string* str) {
-  CHECK_NOTNULL(str);
-  boost::erase_all(*str, s);
-}
-
-void replace_all(const std::string& find, const std::string& replace, std::string* str) {
-  CHECK_NOTNULL(str);
-  boost::replace_all(*str, find, replace);
-}
-
-std::string remove_newlines( std::string const & str ) {
-  std::string copy = str;
-  copy.erase(std::remove(copy.begin(), copy.end(), '\n'), copy.end());
-  return copy;
-}
 
 void parse_output(char* filename, Response* response) {
   using std::string;

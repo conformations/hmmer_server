@@ -1,5 +1,6 @@
 #include "hmmer.pb.h"
 #include "parse.h"
+#include "str_util.h"
 #include "util.h"
 
 #include <cstdio>
